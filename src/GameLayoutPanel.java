@@ -12,9 +12,6 @@ public class GameLayoutPanel extends JPanel {
     private ScorePanel scorePanel = new ScorePanel();
     private GamePanel gamePanel = new GamePanel(scorePanel, textSource);
 
-
-    private Clip clip; // 오디오 재생을 위한 Clip
-
     public GameLayoutPanel(CardLayout cardLayout, JPanel mainPanel) {
         this.cardLayout = cardLayout;
         this.mainPanel = mainPanel;

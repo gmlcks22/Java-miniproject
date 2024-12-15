@@ -26,7 +26,7 @@ public class GameFrame extends JFrame{
         menuPanel = new MenuPanel();
 
         // 각 화면의 패널을 mainPanel에 추가
-        mainPanel.add(new MenuPanel(), "MenuScreen");
+        mainPanel.add(menuPanel, "MenuScreen");
         mainPanel.add(new GameLayoutPanel(cardLayout, mainPanel), "GameLayoutScreen"); // GameLayout에 cardLayout과 mainPanel 전달
         mainPanel.add(new ScoreBoardPanel(cardLayout, mainPanel), "ScoreScreen"); // ScoreBoard에 cardLayout과 mainPanel 전달
         mainPanel.add(new TextEditPanel(cardLayout, mainPanel), "TextEditScreen"); // TextEdit에 cardLayout과 mainPanel 전달
