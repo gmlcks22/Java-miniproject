@@ -8,9 +8,11 @@ public class GameFrame extends JFrame{
     private JPanel mainPanel; // CardLayout 으로 화면 전환을 제어할 메인 패널
     private CardLayout cardLayout; // 화면 전환을 위한 CardLayout 사용
 
-    private GameLayoutPanel gameLayoutPanel = new GameLayoutPanel(cardLayout, mainPanel);
+    private MenuPanel menuPanel; // MenuPanel 객체를 맴버 변수로 선언:(다른 Panel에서 MenuPanel 객체의 메소드를 사용할 수 있게 하기 위함)
 
-    //private EditPanel editPanel = new EditPanel(textSource);
+//    private GameLayoutPanel gameLayoutPanel = new GameLayoutPanel(cardLayout, mainPanel);
+//    private ScoreBoardPanel scoreBoardPanel = new ScoreBoardPanel(cardLayout, mainPanel);
+//    private TextEditPanel textEditPanel = new TextEditPanel(cardLayout, mainPanel);
 
     public GameFrame() {
         setTitle("스타워즈 단어 게임");
@@ -18,15 +20,16 @@ public class GameFrame extends JFrame{
         setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // CardLayout 및 mainPanel 설정
+        // CardLayout 및 mainPanel, menuPanel 설정
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
+        menuPanel = new MenuPanel();
 
         // 각 화면의 패널을 mainPanel에 추가
         mainPanel.add(new MenuPanel(), "MenuScreen");
         mainPanel.add(new GameLayoutPanel(cardLayout, mainPanel), "GameLayoutScreen"); // GameLayout에 cardLayout과 mainPanel 전달
-        //mainPanel.add(new ScoreBoardPanel(), "ScoreScreen");
-        //mainPanel.add(new TextEditPanel(), "TextEditScreen");
+        mainPanel.add(new ScoreBoardPanel(cardLayout, mainPanel), "ScoreScreen"); // ScoreBoard에 cardLayout과 mainPanel 전달
+        mainPanel.add(new TextEditPanel(cardLayout, mainPanel), "TextEditScreen"); // TextEdit에 cardLayout과 mainPanel 전달
 
         // mainPanel을 프레임에 추가
         setContentPane(mainPanel);
@@ -67,8 +70,13 @@ public class GameFrame extends JFrame{
             gameButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    cardLayout.show(mainPanel, "GameLayoutScreen"); // GameLayoutScreen 이름의 컴포넌트로 뒤집음(flip)
-                    clip.stop();
+                    clip.stop(); // 오디오 재생 멈춤
+
+                    GameLayoutPanel newGameLayoutPanel = new GameLayoutPanel(cardLayout, mainPanel); // 새로운 newGameLayoutPanel 만듦
+                    mainPanel.add(newGameLayoutPanel, "GameLayoutScreen"); // GameLayout에 cardLayout과 mainPanel 전달
+                    System.out.println("newGameLayoutScreen 패널 생성 완료");
+
+                    cardLayout.show(mainPanel, "GameLayoutScreen");
                 }
             });
             // 지금까지 저장된 점수를 보는 패널로 넘어가는 액션
@@ -87,6 +95,9 @@ public class GameFrame extends JFrame{
                     clip.stop();
                 }
             });
+
+            clip.setFramePosition(0); // 재생 위치를 첫 프레임으로 변경
+            clip.start(); // 오디오 초기 재생
         }
 
         @Override
@@ -101,24 +112,28 @@ public class GameFrame extends JFrame{
                 File audioFile = new File(pathName); // 오디오 파일의 경료명
                 AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile); // 오디오 파일로부터
                 clip.open(audioStream); // 재생할 오디오 스트림 열기
-                clip.start();
-                clip.loop(Clip.LOOP_CONTINUOUSLY);
             }
             catch (LineUnavailableException e) { e.printStackTrace(); }
             catch (UnsupportedAudioFileException e) { e.printStackTrace(); }
             catch (IOException e) { e.printStackTrace(); }
         }
+
+        // 오디오 재생
+        public void playAudio() {
+            clip.setFramePosition(0); // 처음부터 재생
+            clip.start();
+        }
+
+        // 오디오 중지
+        public void stopAudio() {
+            clip.stop();
+        }
     }
 
-
-
-//    class ScoreBoardPanel extends JPanel {
-//
-//    }
-//
-//    class TextEditPanel extends JPanel {
-//
-//    }
+    // menuPanel 반환
+    public MenuPanel getMenuPanel() {
+        return menuPanel;
+    }
 
     public static void main(String[] args) {
         new GameFrame();

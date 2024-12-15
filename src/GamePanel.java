@@ -2,13 +2,12 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class GamePanel extends JPanel{
-	private JLabel fallingLabel = new JLabel("Hello"); //fallingLabel이 groundPanel보다 먼저 와야함 생성자에 fallingLabel이 사용되기 때문
+	private JLabel fallingLabel = new JLabel("Hello");
 	private GameGroundPanel ground = new GameGroundPanel();
 	private InputPanel input = new InputPanel();
 	private ScorePanel scorePanel = null;

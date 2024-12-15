@@ -1,3 +1,4 @@
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -10,6 +11,9 @@ public class GameLayoutPanel extends JPanel {
     private TextSource textSource = new TextSource();
     private ScorePanel scorePanel = new ScorePanel();
     private GamePanel gamePanel = new GamePanel(scorePanel, textSource);
+
+
+    private Clip clip; // 오디오 재생을 위한 Clip
 
     public GameLayoutPanel(CardLayout cardLayout, JPanel mainPanel) {
         this.cardLayout = cardLayout;
@@ -34,6 +38,8 @@ public class GameLayoutPanel extends JPanel {
 
         // 툴바 생성
         makeToolBar();
+
+        gamePanel.startGame(); // 게임 시작
     }
 
     public void makeToolBar() {
@@ -49,14 +55,23 @@ public class GameLayoutPanel extends JPanel {
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                mainPanel.remove(mainPanel.getComponent(1));
+                System.out.println("기존 GameLayoutScreen 패널 삭제 완료");
+
+                JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(mainPanel); // 최상위 프레임 topFrame
+                GameFrame gameFrame = (GameFrame) topFrame; // JFrame -> GameFrame 다운캐스팅
+                GameFrame.MenuPanel menuPanel = gameFrame.getMenuPanel(); //
+                menuPanel.playAudio(); // 오디오 재생
+
                 cardLayout.show(mainPanel, "MenuScreen"); // MenuScreen 이름의 컴포넌트로 뒤집음(flip)
+                System.out.println("메인 화면으로 이동");
             }
         });
 
         pauseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // 게임 멈춤
+                // todo 게임 멈춤
             }
         });
     }
