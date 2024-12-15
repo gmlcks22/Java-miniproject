@@ -45,9 +45,9 @@ public class GameLayoutPanel extends JPanel {
         this.add(toolbar, BorderLayout.NORTH);
 
         JButton exitButton = new JButton("Exit"); // 게임 종료
-        JButton pauseButton = new JButton("Pause");
+        JButton pauseResumeButton = new JButton("Pause");
         toolbar.add(exitButton);
-        toolbar.add(pauseButton);
+        toolbar.add(pauseResumeButton);
 
         exitButton.addActionListener(new ActionListener() {
             @Override
@@ -65,10 +65,19 @@ public class GameLayoutPanel extends JPanel {
             }
         });
 
-        pauseButton.addActionListener(new ActionListener() {
+        pauseResumeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // todo 게임 멈춤
+                JButton b = (JButton)e.getSource();
+                if(b.getText().equals("Pause")){ // pause 버튼을 누르면
+                    b.setText("Resume"); // 버튼 텍스트를 "Resume"으로 바꾸고
+                    gamePanel.stopFalling(); // 게임 정지
+                }
+                else{
+                    b.setText("Pause"); // 버튼 텍스트를 "Pause"로 바꾸고
+                    gamePanel.resumeFalling(); // 게임 계속
+                }
             }
         });
     }
