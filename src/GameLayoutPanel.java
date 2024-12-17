@@ -1,3 +1,5 @@
+import org.w3c.dom.Text;
+
 import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
@@ -10,11 +12,14 @@ public class GameLayoutPanel extends JPanel {
 
     private TextSource textSource = new TextSource();
     private ScorePanel scorePanel = new ScorePanel();
-    private GamePanel gamePanel = new GamePanel(scorePanel, textSource);
+    private WeaponPanel weaponPanel = new WeaponPanel();
+    private GamePanel gamePanel;
 
     public GameLayoutPanel(CardLayout cardLayout, JPanel mainPanel) {
         this.cardLayout = cardLayout;
         this.mainPanel = mainPanel;
+
+        gamePanel = new GamePanel(scorePanel, textSource);
 
         setLayout(new BorderLayout());
         JSplitPane hPane = new JSplitPane();
@@ -29,14 +34,13 @@ public class GameLayoutPanel extends JPanel {
 
         vPane.setDividerLocation(250);
         vPane.setTopComponent(scorePanel); // scorePanel TopComponent에 추가
-        //vPane.setBottomComponent(editPanel);
+        vPane.setBottomComponent(weaponPanel);
 
         add(hPane, BorderLayout.CENTER);
 
         // 툴바 생성
         makeToolBar();
 
-        gamePanel.startGame(); // 게임 시작
     }
 
     public void makeToolBar() {
@@ -45,8 +49,10 @@ public class GameLayoutPanel extends JPanel {
         this.add(toolbar, BorderLayout.NORTH);
 
         JButton exitButton = new JButton("Exit"); // 게임 종료
+        JButton startButton = new JButton("Start"); // 게임 시작(스레드 시작)
         JButton pauseResumeButton = new JButton("Pause");
         toolbar.add(exitButton);
+        toolbar.add(startButton);
         toolbar.add(pauseResumeButton);
 
         exitButton.addActionListener(new ActionListener() {
@@ -62,6 +68,13 @@ public class GameLayoutPanel extends JPanel {
 
                 cardLayout.show(mainPanel, "MenuScreen"); // MenuScreen 이름의 컴포넌트로 뒤집음(flip)
                 System.out.println("메인 화면으로 이동");
+            }
+        });
+
+        startButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gamePanel.startGame(); // 게임 시작
             }
         });
 

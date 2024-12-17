@@ -9,6 +9,5 @@ public class ScoreBoardPanel extends JPanel {
         this.cardLayout = cardLayout;
         this.mainPanel = mainPanel;
 
-
     }
 }

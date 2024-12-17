@@ -7,7 +7,6 @@ import java.io.*;
 public class GameFrame extends JFrame{
     private JPanel mainPanel; // CardLayout 으로 화면 전환을 제어할 메인 패널
     private CardLayout cardLayout; // 화면 전환을 위한 CardLayout 사용
-
     private MenuPanel menuPanel; // MenuPanel 객체를 맴버 변수로 선언:(다른 Panel에서 MenuPanel 객체의 메소드를 사용할 수 있게 하기 위함)
 
 //    private GameLayoutPanel gameLayoutPanel = new GameLayoutPanel(cardLayout, mainPanel);
